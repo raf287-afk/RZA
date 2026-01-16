@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - RZA Wildlife Park</title>
+    <link rel="stylesheet" href="static/account.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Account Navigation -->
+    <nav class="account-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">
+                    <img src="static/RZA_Logo.png" alt="RZA Logo" class="logo-img">
+                </a>
+            </div>
+
+            <div class="nav-menu">
+                <a href="{{ url_for('home') }}" class="nav-link">
+                    <i class="ri-home-line"></i>
+                    <span>Home</span>
+                </a>
+                <a href="{{ url_for('account') }}" class="nav-link active">
+                    <i class="ri-user-line"></i>
+                    <span>My Account</span>
+                </a>
+                <a href="{{ url_for('zoo_booking') }}" class="nav-link">
+                    <i class="ri-calendar-line"></i>
+                    <span>Book Zoo Visit</span>
+                </a>
+                <a href="{{ url_for('hotel_booking') }}" class="nav-link">
+                    <i class="ri-hotel-line"></i>
+                    <span>Book Hotel Stay</span>
+                </a>
+                {% if logged_in %}
+                <a href="{{ url_for('logout') }}" class="nav-link logout">
+                    <i class="ri-logout-box-line"></i>
+                    <span>Logout</span>
+                </a>
+                {% endif %}
+            </div>
+
+            <div class="user-info">
+                <i class="ri-user-fill"></i>
+                <span>{{ user.username if user else 'Guest' }}</span>
+            </div>
+
+            <div class="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="account-container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1>Welcome, {{ user.username if user else 'Guest' }}!</h1>
+            <p class="welcome-subtitle">Manage your bookings and account details</p>
+
+            <div class="user-details">
+                <div class="detail-card">
+                    <i class="ri-mail-line"></i>
+                    <div>
+                        <h3>Email</h3>
+                        <p>{{ user.email if user else 'Not logged in' }}</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <i class="ri-cake-line"></i>
+                    <div>
+                        <h3>Date of Birth</h3>
+                        <p>{{ user.dateOfBirth if user else 'Not available' }}</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <i class="ri-calendar-check-line"></i>
+                    <div>
+                        <h3>Total Bookings</h3>
+                        <p>{{total_bookings}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Tabs -->
+        <div class="bookings-section">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="zoo-bookings">
+                    <i class="ri-zoo-line"></i>
+                    Zoo Bookings
+                    <span class="badge">{{ zoo_bookings|length if zoo_bookings else 0 }}</span>
+                </button>
+                <button class="tab-btn" data-tab="hotel-bookings">
+                    <i class="ri-hotel-line"></i>
+                    Hotel Bookings
+                    <span class="badge">{{ hotel_bookings|length if hotel_bookings else 0 }}</span>
+                </button>
+            </div>
+
+            <!-- Zoo Bookings Tab -->
+            <div id="zoo-bookings" class="tab-content active">
+                <div class="bookings-grid">
+                    {% if zoo_bookings %}
+                        {% for booking in zoo_bookings %}
+                        <div class="booking-card">
+                            <div class="booking-header">
+                                <div>
+                                    <h3>Zoo Visit Booking</h3>
+                                    <p class="booking-id">Booking ID: {{ booking.zooBookingID }}</p>
+                                </div>
+                                <div class="booking-status status-confirmed">
+                                    <i class="ri-checkbox-circle-line"></i>
+                                    Confirmed
+                                </div>
+                            </div>
+
+                            <div class="booking-details">
+                                <div class="detail-row">
+                                    <span>Visit Date:</span>
+                                    <strong>{{ booking.visitDate }}</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Ticket Type:</span>
+                                    <span>{{ booking.ticketType }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Adults:</span>
+                                    <span>{{ booking.numberOfAdults }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Children:</span>
+                                    <span>{{ booking.numberOfChildren }}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Booking Name:</span>
+                                    <span>{{ booking.fullName }}</span>
+                                </div>
+                            </div>
+
+                            <div class="booking-actions">
+                                <a href="/zoo_booking" class="btn btn-secondary">
+                                    <i class="ri-edit-line"></i>
+                                    Modify
+                                </a>
+                                <form action="/cancel_booking/{{ booking.zooBookingID }}" method="POST" class="cancel-form">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                        <i class="ri-close-circle-line"></i>
+                                        Cancel Booking
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="ri-calendar-line"></i>
+                            <h3>No Zoo Bookings Yet</h3>
+                            <p>You haven't booked any zoo visits yet.</p>
+                            <a href="{{ url_for('zoo_booking') }}" class="btn btn-primary">
+                                <i class="ri-calendar-line"></i>
+                                Book a Zoo Visit
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Hotel Bookings Tab -->
+            <div id="hotel-bookings" class="tab-content">
+                <div class="bookings-grid">
+                    {% if hotel_bookings %}
+                        {% for booking in hotel_bookings %}
+                        <div class="booking-card">
+                            <div class="booking-header">
+                                <div>
+                                    <h3>Hotel Stay Booking</h3>
+                                    <p class="booking-id">Booking ID: {{ booking.hotelBookingID }}</p>
+                                </div>
+                                <div class="booking-status status-confirmed">
+                                    <i class="ri-checkbox-circle-line"></i>
+                                    Confirmed
+                                </div>
+                            </div>
+
+                            <div class="booking-details">
+                                <div class="detail-row">
+                                    <span>Room Type:</span>
+                                    <strong>{{ booking.roomType }}</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span>Booking Date:</span>
+                                    <span>{{ booking.bookingDate.strftime('%Y-%m-%d') if booking.bookingDate else 'N/A' }}</span>
+                                </div>
+                            </div>
+
+                            <div class="booking-actions">
+                                <a href="/hotel_booking" class="btn btn-secondary">
+                                    <i class="ri-edit-line"></i>
+                                    Modify
+                                </a>
+                                <form action="/cancel_hotel_booking/{{ booking.hotelBookingID }}" method="POST" class="cancel-form">
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?')">
+                                        <i class="ri-close-circle-line"></i>
+                                        Cancel Booking
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="ri-hotel-line"></i>
+                            <h3>No Hotel Bookings Yet</h3>
+                            <p>You haven't booked any hotel stays yet.</p>
+                            <a href="{{ url_for('hotel_booking') }}" class="btn btn-primary">
+                                <i class="ri-hotel-line"></i>
+                                Book a Hotel Stay
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="{{ url_for('zoo_booking') }}" class="action-card">
+                    <i class="ri-zoo-line"></i>
+                    <h3>Book Zoo Visit</h3>
+                    <p>Schedule your wildlife adventure</p>
+                </a>
+                <a href="{{ url_for('hotel_booking') }}" class="action-card">
+                    <i class="ri-hotel-line"></i>
+                    <h3>Book Hotel Stay</h3>
+                    <p>Resort accommodation booking</p>
+                </a>
+                <a href="/" class="action-card">
+                    <i class="ri-information-line"></i>
+                    <h3>Park Information</h3>
+                    <p>Learn about attractions</p>
+                </a>
+                {% if logged_in %}
+                <a href="{{ url_for('logout') }}" class="action-card logout">
+                    <i class="ri-logout-box-line"></i>
+                    <h3>Logout</h3>
+                    <p>Sign out of your account</p>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <script>
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all tabs and buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Mobile Navigation Toggle
+        document.querySelector('.nav-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            document.querySelector('.user-info').classList.toggle('active');
+        });
+
+        // Flash messages auto-close
+        const flashMessages = document.querySelectorAll('.flash-message');
+        flashMessages.forEach(message => {
+            setTimeout(() => {
+                message.style.opacity = '0';
+                setTimeout(() => message.remove(), 300);
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

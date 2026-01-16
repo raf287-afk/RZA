@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RZA Wildlife Park - Login</title>
+    <link rel="stylesheet" type="text/css" href="static/login.css" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav__bar">
+        <div class="logo">
+          <a href="/">
+            <img src="static/RZA_Logo.png" alt="RZA Logo" class="logo-img" />
+          </a>
+        </div>
+
+        <ul class="nav__links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#explore">Explore</a></li>
+          <li><a href="/#contact">Contact</a></li>
+
+          {% if session.get('userID') %}
+            <li><a href="/account">My Account</a></li>
+            <li class="logout-item">
+              <a href="/logout">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+              </a>
+              <span class="username-badge">{{ session.get('username') }}</span>
+            </li>
+          {% else %}
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+          {% endif %}
+        </ul>
+
+        <div class="nav__menu__btn">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Login Container -->
+    <div class="container">
+      <!-- Login Form -->
+      <div class="form-container" id="login-form">
+        <h1 class="title">Welcome to RZA</h1>
+        <p class="subtitle">Sign in to your account</p>
+
+        <form action="/login" method="POST" class="form">
+          <!-- Email -->
+          <div class="input-group">
+             <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required />
+          </div>
+
+          <!-- Password -->
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+
+        <div class="switch-form">
+          <p>Don't have an account?</p>
+          <button class="btn btn-outline" onclick="window.location.href='/register'">Join RZA Wildlife Park</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Navigation menu toggle for mobile
+      document.querySelector('.nav__menu__btn').addEventListener('click', function() {
+        document.querySelector('.nav__links').classList.toggle('active');
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Stay - RZA Wildlife Resort</title>
+    <link rel="stylesheet" href="static/hotel-booking.css">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- NAVIGATION - Same as your working version -->
+    <nav class="unified-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">
+                    <img src="static/RZA_Logo.png" alt="RZA Logo" class="logo-img">
+                </a>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/accommodations" class="nav-link">
+                    <i class="fas fa-bed"></i>
+                    <span>Rooms & Suites</span>
+                </a>
+                <a href="/experiences" class="nav-link">
+                    <i class="fas fa-binoculars"></i>
+                    <span>Experiences</span>
+                </a>
+                <a href="/dining" class="nav-link">
+                    <i class="fas fa-utensils"></i>
+                    <span>Dining</span>
+                </a>
+                <a href="/contact" class="nav-link">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+                <a href="/account" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>My Account</span>
+                </a>
+                
+                {% if logged_in %}
+                <a href="/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+                {% endif %}
+            </div>
+            
+            {% if logged_in and user %}
+            <div class="user-info">
+                <i class="fas fa-user"></i>
+                <span>{{ user.username }}</span>
+            </div>
+            {% endif %}
+
+            <button class="btn btn-primary" onclick="window.location.href='/hotel_booking'">
+                <i class="fas fa-concierge-bell"></i>
+                Book Stay
+            </button>
+
+            <div class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <i class="fas fa-info-circle"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="booking-container">
+        <div class="booking-header">
+            <h1>Book Your Wildlife Retreat</h1>
+            <p>Experience luxury accommodation amidst nature at RZA Wildlife Resort</p>
+        </div>
+
+        <div class="booking-content">
+            <div class="booking-form-container">
+                <!-- FORM ACTION POINTS TO YOUR FLASK ROUTE -->
+                <form action="/hotel_booking" method="POST" class="booking-form">
+                    <!-- Room Selection Section -->
+                    <div class="form-section">
+                        <h3><i class="fas fa-bed"></i> Room Selection</h3>
+                        <div class="room-options">
+                            <!-- Jungle View Room -->
+                            <label class="room-card" data-price="299">
+                                <!-- This radio sends 'roomType' to your Python route -->
+                                <input type="radio" name="roomType" value="Jungle View Room" required checked style="display: none;">
+                                <div class="room-content">
+                                    <div class="room-header">
+                                        <h4>Jungle View Room</h4>
+                                        <span class="room-price">$299<span>/night</span></span>
+                                    </div>
+                                    <p>Cozy room with views of the lush jungle canopy</p>
+                                    <ul class="room-features">
+                                        <li><i class="fas fa-wifi"></i> Free WiFi</li>
+                                        <li><i class="fas fa-tv"></i> Smart TV</li>
+                                        <li><i class="fas fa-coffee"></i> Coffee Maker</li>
+                                    </ul>
+                                </div>
+                            </label>
+
+                            <!-- Safari Suite -->
+                            <label class="room-card" data-price="449">
+                                <input type="radio" name="roomType" value="Safari Suite" required style="display: none;">
+                                <div class="room-content">
+                                    <div class="room-header">
+                                        <h4>Safari Suite</h4>
+                                        <span class="room-price">$449<span>/night</span></span>
+                                    </div>
+                                    <p>Spacious suite with private balcony overlooking wildlife areas</p>
+                                    <ul class="room-features">
+                                        <li><i class="fas fa-wifi"></i> Free WiFi</li>
+                                        <li><i class="fas fa-tv"></i> Smart TV</li>
+                                        <li><i class="fas fa-coffee"></i> Coffee Maker</li>
+                                        <li><i class="fas fa-wine-glass-alt"></i> Mini Bar</li>
+                                        <li><i class="fas fa-snowflake"></i> Air Conditioning</li>
+                                    </ul>
+                                </div>
+                            </label>
+
+                            <!-- Wilderness Villa -->
+                            <label class="room-card" data-price="699">
+                                <input type="radio" name="roomType" value="Wilderness Villa" required style="display: none;">
+                                <div class="room-content">
+                                    <div class="room-header">
+                                        <h4>Wilderness Villa</h4>
+                                        <span class="room-price">$699<span>/night</span></span>
+                                    </div>
+                                    <p>Luxury villa with private pool and dedicated butler service</p>
+                                    <ul class="room-features">
+                                        <li><i class="fas fa-wifi"></i> Free WiFi</li>
+                                        <li><i class="fas fa-tv"></i> Smart TV</li>
+                                        <li><i class="fas fa-coffee"></i> Coffee Maker</li>
+                                        <li><i class="fas fa-wine-glass-alt"></i> Mini Bar</li>
+                                        <li><i class="fas fa-snowflake"></i> Air Conditioning</li>
+                                        <li><i class="fas fa-swimming-pool"></i> Private Pool</li>
+                                        <li><i class="fas fa-concierge-bell"></i> Butler Service</li>
+                                    </ul>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Note about database limitations -->
+                    <div class="info-note">
+                        <i class="fas fa-info-circle"></i>
+                        <p><strong>Note:</strong> Your booking will record the room type only. Additional details will be confirmed via email.</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-concierge-bell"></i>
+                        Complete Reservation
+                    </button>
+                </form>
+            </div>
+
+            <div class="booking-info">
+                <div class="card">
+                    <h3><i class="fas fa-info-circle"></i> Resort Information</h3>
+                    <div class="info-item">
+                        <strong>Check-in Time:</strong>
+                        <p>3:00 PM</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Check-out Time:</strong>
+                        <p>11:00 AM</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Address:</strong>
+                        <p>RZA Wildlife Resort<br>123 Safari Trail, Forest City</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Contact:</strong>
+                        <p>reservations@rzawildlife.com<br>+1 (555) 123-RESORT</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-shield-alt"></i> Cancellation Policy</h3>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success-color);"></i> Free cancellation up to 7 days before check-in</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success-color);"></i> 50% refund for cancellations within 7 days</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success-color);"></i> No refund for no-shows or same-day cancellations</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: var(--success-color);"></i> Travel insurance recommended</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-star"></i> Resort Amenities</h3>
+                    <div class="amenities-grid">
+                        <div class="amenity-item">
+                            <i class="fas fa-utensils"></i>
+                            <span>3 Restaurants</span>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-swimming-pool"></i>
+                            <span>Infinity Pool</span>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-spa"></i>
+                            <span>Wilderness Spa</span>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-dumbbell"></i>
+                            <span>Fitness Center</span>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-wifi"></i>
+                            <span>Free WiFi</span>
+                        </div>
+                        <div class="amenity-item">
+                            <i class="fas fa-paw"></i>
+                            <span>Pet Friendly</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Room selection styling
+        document.querySelectorAll('.room-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected class from all cards
+                document.querySelectorAll('.room-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+
+                // Add selected class to clicked card
+                this.classList.add('selected');
+
+                // Check the radio button inside this card
+                const radioInput = this.querySelector('input[type="radio"]');
+                if (radioInput) {
+                    radioInput.checked = true;
+                }
+            });
+
+            // Initialize: Check if the radio inside is checked and add selected class
+            const radioInput = card.querySelector('input[type="radio"]');
+            if (radioInput && radioInput.checked) {
+                card.classList.add('selected');
+            }
+        });
+
+        // Mobile navigation toggle using new CSS classes
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            document.querySelector('.user-info')?.classList.toggle('active');
+        });
+
+        // Set first room as selected by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstRoom = document.querySelector('.room-card');
+            if (firstRoom) {
+                firstRoom.classList.add('selected');
+                const firstRadio = firstRoom.querySelector('input[type="radio"]');
+                if (firstRadio) {
+                    firstRadio.checked = true;
+                }
+            }
+            
+            // Close flash messages when clicked
+            document.querySelectorAll('.flash-message').forEach(message => {
+                message.addEventListener('click', function() {
+                    this.style.opacity = '0';
+                    setTimeout(() => this.remove(), 300);
+                });
+                
+                // Auto-close after 5 seconds
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

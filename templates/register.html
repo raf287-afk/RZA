@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RZA Wildlife Park - Register</title>
+    <link rel="stylesheet" type="text/css" href="static/register.css" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="nav__bar">
+        <div class="logo">
+          <a href="/">
+            <img src="static/RZA_Logo.png" alt="RZA Logo" class="logo-img" />
+          </a>
+        </div>
+          <div class="nav-links">
+          <a href="{{ url_for('home') }}">Home</a>
+          <a href="{{ url_for('register') }}">Register</a>
+          <a href="{{ url_for('account') }}">Account</a>
+          {% if logged_in %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+          {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+          {% endif %}
+
+</div>
+        <button class="btn nav__btn" onclick="window.location.href='/'">Book Visit</button>
+        <div class="nav__menu__btn">
+          <i class="fas fa-bars"></i>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Registration Container -->
+    <div class="container">
+      <!-- Registration Form -->
+      <div class="form-container" id="register-form">
+        <h1 class="title">already have an account?</h1>
+        <p class="subtitle">Create your account</p>
+
+        <form action="/register" method="POST" class="form">
+          <!-- Username -->
+          <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required />
+          </div>
+
+          <!-- Email -->
+          <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required />
+          </div>
+
+          <!-- Password -->
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required />
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="input-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required />
+          </div>
+
+          <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+
+        <div class="switch-form">
+          <p>Already have an account?</p>
+          <button class="btn btn-outline" onclick="window.location.href='/login'">Sign up</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Navigation menu toggle for mobile
+      document.querySelector('.nav__menu__btn').addEventListener('click', function() {
+        document.querySelector('.nav__links').classList.toggle('active');
+      });
+    </script>
+  </body>
+</html>

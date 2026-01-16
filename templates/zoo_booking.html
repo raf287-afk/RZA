@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Visit - RZA Wildlife Park</title>
+    <link rel="stylesheet" href="static/booking.css">
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.5.0/remixicon.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- UNIFIED NAVIGATION -->
+    <nav class="unified-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/"><img src="static/RZA_Logo.png" alt="RZA Logo" class="logo-img"></a>
+            </div>
+
+            <div class="nav-menu">
+                <a href="/" class="nav-link">
+                    <i class="ri-home-line"></i>
+                    <span>Home</span>
+                </a>
+                <a href="/#about" class="nav-link">
+                    <i class="ri-information-line"></i>
+                    <span>About</span>
+                </a>
+
+                {% if logged_in %}
+                    <a href="/account" class="nav-link">
+                        <i class="ri-user-line"></i>
+                        <span>My Account</span>
+                    </a>
+                    <a href="/logout" class="nav-link logout">
+                        <i class="ri-logout-box-line"></i>
+                        <span>Logout</span>
+                    </a>
+                {% else %}
+                    <a href="/login" class="nav-link">
+                        <i class="ri-login-box-line"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="/register" class="nav-link">
+                        <i class="ri-user-add-line"></i>
+                        <span>Register</span>
+                    </a>
+                {% endif %}
+
+                <a href="/#explore" class="nav-link">
+                    <i class="ri-compass-3-line"></i>
+                    <span>Explore</span>
+                </a>
+                <a href="/#contact" class="nav-link">
+                    <i class="ri-contacts-line"></i>
+                    <span>Contact</span>
+                </a>
+            </div>
+
+            {% if logged_in and user %}
+            <div class="user-info">
+                <i class="ri-user-fill"></i>
+                <span>{{ user.username }}</span>
+            </div>
+            {% endif %}
+
+            <button class="btn btn-primary" onclick="window.location.href='/zoo_booking'">
+                <i class="ri-calendar-line"></i>
+                Book Visit
+            </button>
+
+            <div class="nav-toggle">
+                <i class="ri-menu-line"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <i class="ri-information-line"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="booking-container">
+
+            <div class="booking-header">
+                <h1>Book Your Wildlife Adventure</h1>
+                <p>Plan your perfect day at RZA Wildlife Park</p>
+            </div>
+
+            <div class="booking-content">
+                <!-- LEFT SIDE FORM -->
+                <div class="booking-form-container">
+                    <form class="booking-form" action="/zoo_booking" method="POST">
+
+                        <!-- PERSONAL DETAILS -->
+                        <div class="form-section">
+                            <h3><i class="ri-user-line"></i> Your Details</h3>
+                            <div class="input-group">
+                                <label>Full Name</label>
+                                <input type="text" name="fullName" required>
+                            </div>
+                        </div>
+
+                        <!-- VISIT DETAILS -->
+                        <div class="form-section">
+                            <h3><i class="ri-calendar-line"></i> Visit Details</h3>
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label>Visit Date</label>
+                                    <input type="date" id="visit-date" name="visitDate" required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Entry Time</label>
+                                    <select id="entry-time" name="entryTime" required>
+                                        <option value="">Select Time</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="12:00">12:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- VISITOR NUMBERS -->
+                        <div class="form-section">
+                            <h3><i class="ri-group-line"></i> Visitor Information</h3>
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label>Adults (13-64)</label>
+                                    <select id="adults" name="numberOfAdults">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Children (3-12)</label>
+                                    <select id="children" name="numberOfChildren">
+                                        <option value="0" selected>0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TICKET TYPE -->
+                        <div class="form-section">
+                            <h3><i class="ri-crown-line"></i> Ticket Type</h3>
+                            <label class="radio-option">
+                                <input type="radio" name="ticketType" value="Standard" checked>
+                                <span class="radiomark"></span>
+                                Standard Admission
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="ticketType" value="Annual">
+                                <span class="radiomark"></span>
+                                Annual Membership
+                            </label>
+                        </div>
+
+                        <!-- BOOK BUTTON -->
+                        <button type="submit" class="btn btn-primary btn-large btn-block">
+                            <i class="ri-ticket-line"></i>
+                            Complete Booking
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- DEFAULT DATE SCRIPT -->
+    <script>
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split('T')[0];
+        document.getElementById('visit-date').value = tomorrowStr;
+        document.getElementById('visit-date').min = tomorrowStr;
+
+        // Mobile navigation toggle
+        document.querySelector('.nav-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+            document.querySelector('.user-info')?.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
